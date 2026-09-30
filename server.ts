@@ -342,7 +342,13 @@ async function startServer() {
   });
 }
 
-startServer().catch((err) => {
-  console.error('Failed to start server:', err);
-  process.exit(1);
-});
+// Export express app for Vercel serverless functions
+export default app;
+
+// Only listen on port if not running in a serverless environment (e.g. Vercel)
+if (process.env.VERCEL !== '1') {
+  startServer().catch((err) => {
+    console.error('Failed to start server:', err);
+    process.exit(1);
+  });
+}
